@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Résultats de la Simulation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    pre { background-color: #f0f0f0; padding: 10px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Résultats de la Simulation</h1>
+  {% if results.error %}
+  <p class="error">Erreur: {{ results.error }}</p>
+  {% else %}
+  <p>{{ results.message }}</p>
+  <h2>Statistiques Clés</h2>
+  <ul>
+    <li>Ville: {{ results.stats.city }}</li>
+    <li>Config. Livraisons Demandées: {{ results.stats.num_deliveries_requested_config }}</li>
+    <li>Livraisons Réelles: {{ results.stats.num_deliveries_actual }}</li>
+    <li>Config. Colis par Point: {{ results.stats.packages_per_point_config }}</li>
+    <li>Capacité Camion: {{ results.stats.truck_capacity }}</li>
+    <li>Clusters Optimaux: {{ results.stats.num_clusters }}</li>
+    <li>Étapes de la Route: {{ results.stats.route_steps }}</li>
+    <li>Distance Totale: {{ results.stats.total_distance_km }} km</li>
+  </ul>
+
+  <h2>Animation</h2>
+  {% if results.mp4_url %}
+  <video controls autoplay loop muted playsinline style="max-width: 90vw; max-height: 70vh; border: 1px solid #ccc;">
+    <source src="{{ results.mp4_url }}" type="video/mp4">
+    Votre navigateur ne supporte pas la balise vidéo.
+  </video>
+  <p><a href="{{ results.mp4_url }}" target="_blank">Voir MP4 directement</a></p>
+  {% elif results.gif_url %}
+  <img src="{{ results.gif_url }}" alt="Animation de la route" style="max-width: 90vw; max-height: 70vh; border: 1px solid #ccc;">
+  <p><a href="{{ results.gif_url }}" target="_blank">Voir GIF directement</a></p>
+  {% else %}
+  <p>Aucune animation générée ou trouvée.</p>
+  {% endif %}
+
+  {% if results.graph_file_exists %}
+  <p>Graphe final (.graphml) sauvegardé sur le serveur.</p>
+  {% elif results.graph_path %} {# Si le chemin est fourni mais le fichier n'existe pas (erreur de sauvegarde) #}
+  <p>Tentative de sauvegarde du graphe final (.graphml) sur le serveur, mais le fichier n'a pas été trouvé.</p>
+  {% endif %}
+
+  {% if results.profiling_json %}
+  <h2>Données de Profiling (Temps d'exécution)</h2>
+  <details>
+    <summary>Afficher/Cacher les détails du profiling</summary>
+    <pre>{{ results.profiling_json }}</pre>
+  </details>
+  {% endif %}
+  {% endif %}
+  <br>
+  <a href="{{ url_for('index') }}">Retour à la configuration</a>
+</div>
+</body>
+</html>

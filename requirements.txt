@@ -1,0 +1,6 @@
+flask
+osmnx
+scikit-learn
+numpy
+networkx
+matplotlib

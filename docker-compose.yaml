@@ -1,0 +1,15 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: delivery
+    ports:
+      - "5001:5001"
+    # volumes:
+      # Monte les répertoires de sortie pour la persistance.
+    #  - ./core_output:/app/core_output
+    #  - ./core_output_web:/app/core_output_web
+    environment:
+      - PYTHONUNBUFFERED=1 # Décommentez pour un logging direct
+    restart: unless-stopped

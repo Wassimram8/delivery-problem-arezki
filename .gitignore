@@ -1,0 +1,6 @@
+.idea
+.venv
+core_output/*
+core_output_web/*
+cache/*
+__pycache__/
